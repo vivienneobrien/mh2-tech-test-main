@@ -24,6 +24,14 @@ const sincePurchased = ({recentValuation, originalPurchasePrice }) => {
   );
 };
 
+const sincePurchasedPercentage = ({recentValuation, originalPurchasePrice }) => {
+  const sincePurchasedPrice = recentValuation.amount - originalPurchasePrice
+  const sincePurchasedPricePercentageCalculation = sincePurchasedPrice / originalPurchasePrice * 100
+  const sincePurchasedPricePercentageFormatted = sincePurchasedPricePercentageCalculation + "%"
+  return (
+    sincePurchasedPricePercentageFormatted
+  )
+}
 const account = {
   uid: "65156cdc-5cfd-4b34-b626-49c83569f35e",
   deleted: false,
@@ -121,7 +129,7 @@ const Detail = ({}) => {
         <RowContainer>
           <AccountList>
             <InfoText>Purchased for&nbsp;<strong>£199,500</strong>&nbsp; in September 2015</InfoText>
-            <InfoText >Since purchase&nbsp;<strong>{sincePurchased(account)} (20%)</strong></InfoText>
+            <InfoText >Since purchase&nbsp;<strong>{sincePurchased(account)} {sincePurchasedPercentage(account)}</strong></InfoText>
             <InfoText>Annual Appreciation&nbsp;<strong>(5%)</strong></InfoText>
           </AccountList>
         </RowContainer>
