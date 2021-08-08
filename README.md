@@ -48,6 +48,8 @@ Run the development server:
 
 ```bash
 npm run dev
+- If you get Error: Cannot find module 'babel-plugin-styled-components' carry out: [npm install --save-dev babel-plugin-styled-components]
+(https://www.npmjs.com/package/babel-plugin-styled-components)
 ```
 
 Open [http://localhost:3333](http://localhost:3333) with your browser to see the result.
