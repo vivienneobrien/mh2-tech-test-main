@@ -19,8 +19,15 @@ import {
 
 const sincePurchased = ({recentValuation, originalPurchasePrice }) => {
   const sincePurchasedPrice = recentValuation.amount - originalPurchasePrice
+  // Can also do: <NumberFormat value={sincePurchasedPrice} displayType="text" thousandSeparator={true} prefix="£" decimalScale={2} />
+  {new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(sincePurchasedPrice)}
   return (
-    <NumberFormat value={sincePurchasedPrice} displayType="text" thousandSeparator={true} prefix="£" decimalScale={2} />
+    sincePurchasedPrice
   );
 };
 
@@ -43,6 +50,18 @@ const annualAppreciation = ({recentValuation, originalPurchasePrice, originalPur
   return (
     annualAppreciationFormatted
   )
+}
+
+const formatDate = ({originalPurchasePriceDate}) => {
+ return( 
+     <div>
+        {new Intl.DateTimeFormat("en-GB", {
+          year: "numeric",
+          month: "long",
+          day: "2-digit"
+        }).format(originalPurchasePriceDate)}
+        </div>
+ )
 }
 const account = {
   uid: "65156cdc-5cfd-4b34-b626-49c83569f35e",
@@ -140,7 +159,7 @@ const Detail = ({}) => {
         <AccountLabel>Valuation Changes</AccountLabel>
         <RowContainer>
           <AccountList>
-            <InfoText>Purchased for&nbsp;<strong>£199,500</strong>&nbsp; in September 2015</InfoText>
+            <InfoText>Purchased for&nbsp;<strong>£199,500</strong>&nbsp; on the&nbsp;{formatDate({account})} </InfoText>
             <InfoText >Since purchase&nbsp;<strong>{sincePurchased(account)} {sincePurchasedPercentage(account)}</strong></InfoText>
             <InfoText>Annual Appreciation&nbsp;<strong>{annualAppreciation(account)}</strong></InfoText>
           </AccountList>
