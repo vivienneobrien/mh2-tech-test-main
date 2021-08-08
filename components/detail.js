@@ -106,6 +106,16 @@ const Detail = ({}) => {
           </RowContainer>
         </AccountSection>
       )}
+      <AccountSection>
+        <AccountLabel>Valuation Changes</AccountLabel>
+        <RowContainer>
+          <AccountList>
+            <InfoText>Purchased for&nbsp;<strong>£199,500</strong>&nbsp; in September 2015</InfoText>
+            <InfoText>Since purchase&nbsp;<strong>£50,000 (20%)</strong></InfoText>
+            <InfoText>Annual Appreciation&nbsp;<strong>(5%)</strong></InfoText>
+          </AccountList>
+        </RowContainer>
+      </AccountSection>
       <Button
         // This is a dummy action
         onClick={() => alert("You have navigated to the edit account page")}
