@@ -1,3 +1,5 @@
+import NumberFormat from 'react-number-format';
+
 /* eslint-disable max-statements */
 import PropTypes from "prop-types";
 import React, { useEffect } from "react";
@@ -13,6 +15,14 @@ import {
   Inset,
   RowContainer,
 } from "./style";
+
+
+const sincePurchased = ({recentValuation, originalPurchasePrice }) => {
+  const sincePurchasedPrice = recentValuation.amount - originalPurchasePrice
+  return (
+    <NumberFormat value={sincePurchasedPrice} displayType="text" thousandSeparator={true} prefix="£" decimalScale={2} />
+  );
+};
 
 const account = {
   uid: "65156cdc-5cfd-4b34-b626-49c83569f35e",
@@ -111,7 +121,7 @@ const Detail = ({}) => {
         <RowContainer>
           <AccountList>
             <InfoText>Purchased for&nbsp;<strong>£199,500</strong>&nbsp; in September 2015</InfoText>
-            <InfoText>Since purchase&nbsp;<strong>£50,000 (20%)</strong></InfoText>
+            <InfoText >Since purchase&nbsp;<strong>{sincePurchased(account)} (20%)</strong></InfoText>
             <InfoText>Annual Appreciation&nbsp;<strong>(5%)</strong></InfoText>
           </AccountList>
         </RowContainer>
