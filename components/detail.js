@@ -32,6 +32,18 @@ const sincePurchasedPercentage = ({recentValuation, originalPurchasePrice }) => 
     sincePurchasedPricePercentageFormatted
   )
 }
+
+const annualAppreciation = ({recentValuation, originalPurchasePrice, originalPurchasePriceDate}) => {
+  const sincePurchasedPrice = recentValuation.amount - originalPurchasePrice
+  const sincePurchasedPricePercentageCalculation = sincePurchasedPrice / originalPurchasePrice * 100;
+  const currentYear = new Date().getFullYear(); 
+  const numberOfYearsSincePurchased = currentYear - parseInt(originalPurchasePriceDate.slice(0,4));
+  const annualAppreciationCalculation = sincePurchasedPricePercentageCalculation / numberOfYearsSincePurchased;
+  const annualAppreciationFormatted = annualAppreciationCalculation + "%";
+  return (
+    annualAppreciationFormatted
+  )
+}
 const account = {
   uid: "65156cdc-5cfd-4b34-b626-49c83569f35e",
   deleted: false,
@@ -130,7 +142,7 @@ const Detail = ({}) => {
           <AccountList>
             <InfoText>Purchased for&nbsp;<strong>£199,500</strong>&nbsp; in September 2015</InfoText>
             <InfoText >Since purchase&nbsp;<strong>{sincePurchased(account)} {sincePurchasedPercentage(account)}</strong></InfoText>
-            <InfoText>Annual Appreciation&nbsp;<strong>(5%)</strong></InfoText>
+            <InfoText>Annual Appreciation&nbsp;<strong>{annualAppreciation(account)}</strong></InfoText>
           </AccountList>
         </RowContainer>
       </AccountSection>
