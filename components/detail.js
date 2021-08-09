@@ -154,7 +154,7 @@ const Detail = ({}) => {
   const lastUpdatedFormatted = formatDate(lastUpdate);
   console.log(lastUpdate)
   const originalPurchasePriceDateFormatted = formatDate(account.originalPurchasePriceDateFormatted)
-  console.log(originalPurchasePriceDateFormatted)
+  // const originalPruchasePriceFormatted = formatAmount(originalPurchasePrice)
   
   return (
     <Inset>
@@ -203,7 +203,7 @@ const Detail = ({}) => {
         <RowContainer>
           <AccountList>
             <InfoText>
-              Purchased for&nbsp;<strong>£199,500</strong>&nbsp; on the&nbsp;
+              Purchased for&nbsp;<strong>{formatAmount(account.originalPurchasePrice)}</strong>&nbsp; on the&nbsp;
             {originalPurchasePriceDateFormatted}
             </InfoText>
             <InfoText>
