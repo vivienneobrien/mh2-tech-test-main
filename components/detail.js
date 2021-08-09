@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { add, format } from "date-fns";
 import { Button } from "./button";
+import axios from 'axios';
 
 import {
   AccountHeadline,
@@ -58,11 +59,16 @@ const sincePurchased = ({ recentValuation, originalPurchasePrice }) => {
   const sincePurchasedPrice = subtract(
     recentValuation.amount,
     originalPurchasePrice
-  ); 
+  ); // subtract (take it out of busines context), separation of concerns/calculations
   // Can also do: <NumberFormat value={sincePurchasedPrice} displayType="text" thousandSeparator={true} prefix="£" decimalScale={2} />
   const sincePurchasedPriceFormatted = formatAmount(sincePurchasedPrice)
   return sincePurchasedPriceFormatted;
 };
+
+// util.js file as plain js, pass in one date and give back a new string
+// semantic: use correct attributes e.g. h1 over a span. break down html semantics the right way
+//const formatDate = (a) => {
+
 
 const sincePurchasedPercentage = ({
   recentValuation,
@@ -110,38 +116,22 @@ const annualAppreciation = ({
   return annualAppreciationFormatted;
 };
 
-const account = {
-  uid: "65156cdc-5cfd-4b34-b626-49c83569f35e",
-  deleted: false,
-  dateCreated: "2020-12-03T08:55:33.421Z",
-  currency: "GBP",
-  name: "15 Temple Way",
-  bankName: "Residential",
-  type: "properties",
-  subType: "residential",
-  originalPurchasePrice: 250000,
-  originalPurchasePriceDate: "2017-09-03",
-  recentValuation: { amount: 310000, status: "good" },
-  associatedMortgages: [
-    {
-      name: "HSBC Repayment Mortgage",
-      uid: "fb463121-b51a-490d-9f19-d2ea76f05e25",
-      currentBalance: -175000,
-    },
-  ],
-  canBeManaged: false,
-  postcode: "BS1 2AA",
-  lastUpdate: "2020-12-01T08:55:33.421Z",
-  updateAfterDays: 30,
-};
 
-const Detail = ({}) => {
-  useEffect(() => {
-    window
-      .fetch("/api/account")
-      .then((res) => res.json())
-      .then(console.log);
-  }, []);
+const Detail = () => {
+  const [account, setAccount] = useState({});
+
+useEffect(() => {
+  axios
+    .get("/api/account")
+    .then((response) => setAccount(response.data.account))
+}, []);
+
+// checking if account is empty
+if (Object.keys(account).length === 0) {
+  return (<div></div>)
+} 
+
+  console.log(account)
 
   let mortgage;
   const lastUpdate = new Date(account.lastUpdate);
@@ -228,5 +218,9 @@ const Detail = ({}) => {
     </Inset>
   );
 };
+
+// Images.propTypes = {
+//   url: PropTypes.string.isRequired,
+// };
 
 export default Detail;
