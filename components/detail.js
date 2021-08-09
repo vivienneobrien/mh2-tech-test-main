@@ -1,8 +1,7 @@
-import NumberFormat from 'react-number-format';
-
+import NumberFormat from "react-number-format";
 /* eslint-disable max-statements */
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { add, format } from "date-fns";
 import { Button } from "./button";
 
@@ -16,53 +15,101 @@ import {
   RowContainer,
 } from "./style";
 
+const subtract = (a, b) => {
+  const total = a - b;
+  return total;
+};
 
-const sincePurchased = ({recentValuation, originalPurchasePrice }) => {
-  const sincePurchasedPrice = recentValuation.amount - originalPurchasePrice
-  // Can also do: <NumberFormat value={sincePurchasedPrice} displayType="text" thousandSeparator={true} prefix="£" decimalScale={2} />
-  {new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: "GBP",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(sincePurchasedPrice)}
+const calculatePercentage = (a, b) => {
+  const total = (a / b) * 100;
+  return total;
+};
+
+// More functionality can be added here if a percentage was not a perfect decimal and needed to be rounded to a certain decimal place, up or down (.floor/.ceil)
+const formatPercentage = (a) => {
   return (
-    sincePurchasedPrice
+    a + "%" 
   );
 };
 
-const sincePurchasedPercentage = ({recentValuation, originalPurchasePrice }) => {
-  const sincePurchasedPrice = recentValuation.amount - originalPurchasePrice
-  const sincePurchasedPricePercentageCalculation = sincePurchasedPrice / originalPurchasePrice * 100
-  const sincePurchasedPricePercentageFormatted = sincePurchasedPricePercentageCalculation + "%"
-  return (
-    sincePurchasedPricePercentageFormatted
-  )
+const divide = (a, b) => {
+  const total = a / b;
+  return total;
+};
+
+const formatDate = (a) => {
+  return new Intl.DateTimeFormat("en-GB", {
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+  }).format(a);
+};
+
+const formatAmount = (a) => {
+  return new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(a);
 }
 
-const annualAppreciation = ({recentValuation, originalPurchasePrice, originalPurchasePriceDate}) => {
-  const sincePurchasedPrice = recentValuation.amount - originalPurchasePrice
-  const sincePurchasedPricePercentageCalculation = sincePurchasedPrice / originalPurchasePrice * 100;
-  const currentYear = new Date().getFullYear(); 
-  const numberOfYearsSincePurchased = currentYear - parseInt(originalPurchasePriceDate.slice(0,4));
-  const annualAppreciationCalculation = sincePurchasedPricePercentageCalculation / numberOfYearsSincePurchased;
-  const annualAppreciationFormatted = annualAppreciationCalculation + "%";
-  return (
-    annualAppreciationFormatted
-  )
-}
+const sincePurchased = ({ recentValuation, originalPurchasePrice }) => {
+  const sincePurchasedPrice = subtract(
+    recentValuation.amount,
+    originalPurchasePrice
+  ); // subtract (take it out of busines context), separation of concerns/calculations
+  // Can also do: <NumberFormat value={sincePurchasedPrice} displayType="text" thousandSeparator={true} prefix="£" decimalScale={2} />
+  const sincePurchasedPriceFormatted = formatAmount(sincePurchasedPrice)
+  return sincePurchasedPriceFormatted;
+};
 
-const formatDate = ({originalPurchasePriceDate}) => {
- return( 
-     <div>
-        {new Intl.DateTimeFormat("en-GB", {
-          year: "numeric",
-          month: "long",
-          day: "2-digit"
-        }).format(originalPurchasePriceDate)}
-        </div>
- )
-}
+const sincePurchasedPercentage = ({
+  recentValuation,
+  originalPurchasePrice,
+}) => {
+  const sincePurchasedPrice = subtract(
+    recentValuation.amount,
+    originalPurchasePrice
+  );
+  const sincePurchasedPricePercentageCalculation = calculatePercentage(
+    sincePurchasedPrice,
+    originalPurchasePrice
+  );
+  const sincePurchasedPricePercentageFormatted = formatPercentage(
+    sincePurchasedPricePercentageCalculation
+  );
+  return sincePurchasedPricePercentageFormatted;
+};
+
+const annualAppreciation = ({
+  recentValuation,
+  originalPurchasePrice,
+  originalPurchasePriceDate,
+}) => {
+  const sincePurchasedPrice = subtract(
+    recentValuation.amount,
+    originalPurchasePrice
+  );
+  const sincePurchasedPricePercentageCalculation = calculatePercentage(
+    sincePurchasedPrice,
+    originalPurchasePrice
+  );
+
+  const currentYear = new Date().getFullYear();
+  const numberOfYearsSincePurchased =
+    currentYear - parseInt(originalPurchasePriceDate.slice(0, 4));
+
+  const annualAppreciationCalculation = divide(
+    sincePurchasedPricePercentageCalculation,
+    numberOfYearsSincePurchased
+  );
+  const annualAppreciationFormatted = formatPercentage(
+    annualAppreciationCalculation
+  );
+  return annualAppreciationFormatted;
+};
+
 const account = {
   uid: "65156cdc-5cfd-4b34-b626-49c83569f35e",
   deleted: false,
@@ -102,25 +149,26 @@ const Detail = ({}) => {
     mortgage = account.associatedMortgages[0];
   }
 
+  const recentValuationAmountFormatted = formatAmount(account.recentValuation.amount);
+  const currentBalanceFormatted = formatAmount(Math.abs(account.associatedMortgages[0].currentBalance));
+  const lastUpdatedFormatted = formatDate(lastUpdate);
+  console.log(lastUpdate)
+  const originalPurchasePriceDateFormatted = formatDate(account.originalPurchasePriceDateFormatted)
+  console.log(originalPurchasePriceDateFormatted)
+  
   return (
     <Inset>
       <AccountSection>
         <AccountLabel>Estimated Value</AccountLabel>
         <AccountHeadline>
-          {new Intl.NumberFormat("en-GB", {
-            style: "currency",
-            currency: "GBP",
-          }).format(account.recentValuation.amount)}
+          {recentValuationAmountFormatted}
         </AccountHeadline>
         <AccountList>
           <InfoText>
-            {`Last updated ${format(lastUpdate, "do MMM yyyy")}`}
+            {`Last updated ${lastUpdatedFormatted}`}
           </InfoText>
           <InfoText>
-            {`Next update ${format(
-              add(lastUpdate, { days: account.updateAfterDays }),
-              "do MMM yyyy"
-            )}`}
+            {`Next update ${format(add(lastUpdate, { days: account.updateAfterDays }),"do MMM yyyy")}`}
           </InfoText>
         </AccountList>
       </AccountSection>
@@ -143,12 +191,7 @@ const Detail = ({}) => {
           >
             <AccountList>
               <InfoText>
-                {new Intl.NumberFormat("en-GB", {
-                  style: "currency",
-                  currency: "GBP",
-                }).format(
-                  Math.abs(account.associatedMortgages[0].currentBalance)
-                )}
+                {currentBalanceFormatted}
               </InfoText>
               <InfoText>{account.associatedMortgages[0].name}</InfoText>
             </AccountList>
@@ -159,9 +202,20 @@ const Detail = ({}) => {
         <AccountLabel>Valuation Changes</AccountLabel>
         <RowContainer>
           <AccountList>
-            <InfoText>Purchased for&nbsp;<strong>£199,500</strong>&nbsp; on the&nbsp;{formatDate({account})} </InfoText>
-            <InfoText >Since purchase&nbsp;<strong>{sincePurchased(account)} {sincePurchasedPercentage(account)}</strong></InfoText>
-            <InfoText>Annual Appreciation&nbsp;<strong>{annualAppreciation(account)}</strong></InfoText>
+            <InfoText>
+              Purchased for&nbsp;<strong>£199,500</strong>&nbsp; on the&nbsp;
+            {originalPurchasePriceDateFormatted}
+            </InfoText>
+            <InfoText>
+              Since purchase&nbsp;
+              <strong>
+                {sincePurchased(account)} {sincePurchasedPercentage(account)}
+              </strong>
+            </InfoText>
+            <InfoText>
+              Annual Appreciation&nbsp;
+              <strong>{annualAppreciation(account)}</strong>
+            </InfoText>
           </AccountList>
         </RowContainer>
       </AccountSection>
