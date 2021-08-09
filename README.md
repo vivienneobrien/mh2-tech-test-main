@@ -30,7 +30,7 @@ Details of a property are located in the API at `/api/account`, use this endpoin
 Someone started implementing this feature with a `useEffect` hook, but you should use whichever method you're most comfortable with.
 
 ### UX/UI Design
-Figma file for [UX/UI improvement](https://www.figma.com/file/AyPUfux8BIezaPCPjfypZN/MoneyHub?node-id=0%3A1)
+Figma file for [UX/UI improvements](https://www.figma.com/file/AyPUfux8BIezaPCPjfypZN/MoneyHub?node-id=0%3A1)
 
 ### Notes
 
