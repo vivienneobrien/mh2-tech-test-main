@@ -64,12 +64,6 @@ const sincePurchased = ({ recentValuation, originalPurchasePrice }) => {
   const sincePurchasedPriceFormatted = formatAmount(sincePurchasedPrice)
   return sincePurchasedPriceFormatted;
 };
-
-// util.js file as plain js, pass in one date and give back a new string
-// semantic: use correct attributes e.g. h1 over a span. break down html semantics the right way
-//const formatDate = (a) => {
-
-
 const sincePurchasedPercentage = ({
   recentValuation,
   originalPurchasePrice,
