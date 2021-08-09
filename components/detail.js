@@ -58,7 +58,7 @@ const sincePurchased = ({ recentValuation, originalPurchasePrice }) => {
   const sincePurchasedPrice = subtract(
     recentValuation.amount,
     originalPurchasePrice
-  ); // subtract (take it out of busines context), separation of concerns/calculations
+  ); 
   // Can also do: <NumberFormat value={sincePurchasedPrice} displayType="text" thousandSeparator={true} prefix="£" decimalScale={2} />
   const sincePurchasedPriceFormatted = formatAmount(sincePurchasedPrice)
   return sincePurchasedPriceFormatted;
