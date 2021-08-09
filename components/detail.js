@@ -39,11 +39,11 @@ const divide = (a, b) => {
 };
 
 const formatDate = (a) => {
-  return new Intl.DateTimeFormat("en-GB", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  }).format(a);
+  if (!(a instanceof Date)) {
+    a = new Date(a);
+  }
+  return (
+  format(a,"do MMM yyyy"))
 };
 
 const formatAmount = (a) => {
@@ -59,7 +59,7 @@ const sincePurchased = ({ recentValuation, originalPurchasePrice }) => {
   const sincePurchasedPrice = subtract(
     recentValuation.amount,
     originalPurchasePrice
-  ); // subtract (take it out of busines context), separation of concerns/calculations
+  ); 
   // Can also do: <NumberFormat value={sincePurchasedPrice} displayType="text" thousandSeparator={true} prefix="£" decimalScale={2} />
   const sincePurchasedPriceFormatted = formatAmount(sincePurchasedPrice)
   return sincePurchasedPriceFormatted;
@@ -137,7 +137,7 @@ if (Object.keys(account).length === 0) {
   const currentBalanceFormatted = formatAmount(Math.abs(account.associatedMortgages[0].currentBalance));
   const lastUpdatedFormatted = formatDate(lastUpdate);
   console.log(lastUpdate)
-  const originalPurchasePriceDateFormatted = formatDate(account.originalPurchasePriceDateFormatted)
+  const originalPurchasePriceDateFormatted = formatDate(account.originalPurchasePriceDate)
   // const originalPruchasePriceFormatted = formatAmount(originalPurchasePrice)
   
   return (
@@ -152,7 +152,8 @@ if (Object.keys(account).length === 0) {
             {`Last updated ${lastUpdatedFormatted}`}
           </InfoText>
           <InfoText>
-            {`Next update ${format(add(lastUpdate, { days: account.updateAfterDays }),"do MMM yyyy")}`}
+         
+            {`Next update ${ formatDate(add(lastUpdate, { days: account.updateAfterDays }))}`}
           </InfoText>
         </AccountList>
       </AccountSection>
@@ -212,9 +213,5 @@ if (Object.keys(account).length === 0) {
     </Inset>
   );
 };
-
-// Images.propTypes = {
-//   url: PropTypes.string.isRequired,
-// };
 
 export default Detail;
