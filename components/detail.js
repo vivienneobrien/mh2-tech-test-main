@@ -16,43 +16,43 @@ import {
   RowContainer,
 } from "./style";
 
-const subtract = (a, b) => {
-  const total = a - b;
+const subtract = (numOne, numTwo) => {
+  const total = numOne - numTwo;
   return total;
 };
 
-const calculatePercentage = (a, b) => {
-  const total = (a / b) * 100;
+const calculatePercentage = (numOne, numTwo) => {
+  const total = (numOne / numTwo) * 100;
   return total;
 };
 
 // More functionality can be added here if a percentage was not a perfect decimal and needed to be rounded to a certain decimal place, up or down (.floor/.ceil)
-const formatPercentage = (a) => {
+const formatPercentage = (num) => {
   return (
-    a + "%" 
+    num + "%" 
   );
 };
 
-const divide = (a, b) => {
-  const total = a / b;
+const divide = (numOne, numTwo) => {
+  const total = numOne / numTwo;
   return total;
 };
 
-const formatDate = (a) => {
-  if (!(a instanceof Date)) {
-    a = new Date(a);
+const formatDate = (stringDateObject) => {
+  if (!(stringDateObject instanceof Date)) { // Confirms it is a string date object
+    stringDateObject = new Date(stringDateObject);
   }
   return (
-  format(a,"do MMM yyyy"))
+  format(stringDateObject,"do MMM yyyy"))
 };
 
-const formatAmount = (a) => {
+const formatAmount = (num) => {
   return new Intl.NumberFormat("en-GB", {
     style: "currency",
     currency: "GBP",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(a);
+  }).format(num);
 }
 
 const sincePurchased = ({ recentValuation, originalPurchasePrice }) => {
@@ -109,7 +109,6 @@ const annualAppreciation = ({
   );
   return annualAppreciationFormatted;
 };
-
 
 const Detail = () => {
   const [account, setAccount] = useState({});
@@ -188,7 +187,7 @@ if (Object.keys(account).length === 0) {
         <RowContainer>
           <AccountList>
             <InfoText>
-              Purchased for&nbsp;<strong>{formatAmount(account.originalPurchasePrice)}</strong>&nbsp; on the&nbsp;
+              Purchased for&nbsp;<strong>{formatAmount(account.originalPurchasePrice)}</strong>&nbsp;on the&nbsp;
             {originalPurchasePriceDateFormatted}
             </InfoText>
             <InfoText>
