@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { add, format } from "date-fns";
 import { Button } from "./button";
-import axios from 'axios';
+import axios from "axios";
 
 import {
   AccountHeadline,
@@ -28,9 +28,7 @@ const calculatePercentage = (numOne, numTwo) => {
 
 // More functionality can be added here if a percentage was not a perfect decimal and needed to be rounded to a certain decimal place, up or down (.floor/.ceil)
 const formatPercentage = (num) => {
-  return (
-    num + "%" 
-  );
+  return num + "%";
 };
 
 const divide = (numOne, numTwo) => {
@@ -39,11 +37,11 @@ const divide = (numOne, numTwo) => {
 };
 
 const formatDate = (stringDateObject) => {
-  if (!(stringDateObject instanceof Date)) { // Confirms it is a string date object
+  if (!(stringDateObject instanceof Date)) {
+    // Confirms it is a string date object
     stringDateObject = new Date(stringDateObject);
   }
-  return (
-  format(stringDateObject,"do MMM yyyy"))
+  return format(stringDateObject, "do MMM yyyy");
 };
 
 const formatAmount = (num) => {
@@ -53,15 +51,15 @@ const formatAmount = (num) => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(num);
-}
+};
 
 const sincePurchased = ({ recentValuation, originalPurchasePrice }) => {
   const sincePurchasedPrice = subtract(
     recentValuation.amount,
     originalPurchasePrice
-  ); 
+  );
   // Can also do: <NumberFormat value={sincePurchasedPrice} displayType="text" thousandSeparator={true} prefix="£" decimalScale={2} />
-  const sincePurchasedPriceFormatted = formatAmount(sincePurchasedPrice)
+  const sincePurchasedPriceFormatted = formatAmount(sincePurchasedPrice);
   return sincePurchasedPriceFormatted;
 };
 const sincePurchasedPercentage = ({
@@ -113,18 +111,16 @@ const annualAppreciation = ({
 const Detail = () => {
   const [account, setAccount] = useState({});
 
-useEffect(() => {
-  axios
-    .get("/api/account")
-    .then((response) => setAccount(response.data.account))
-}, []);
+  useEffect(() => {
+    axios
+      .get("/api/account")
+      .then((response) => setAccount(response.data.account));
+  }, []);
 
-// checking if account is empty
-if (Object.keys(account).length === 0) {
-  return (<div></div>)
-} 
-
-  console.log(account)
+  // checking if account is empty
+  if (Object.keys(account).length === 0) {
+    return <div></div>;
+  }
 
   let mortgage;
   const lastUpdate = new Date(account.lastUpdate);
@@ -132,27 +128,30 @@ if (Object.keys(account).length === 0) {
     mortgage = account.associatedMortgages[0];
   }
 
-  const recentValuationAmountFormatted = formatAmount(account.recentValuation.amount);
-  const currentBalanceFormatted = formatAmount(Math.abs(account.associatedMortgages[0].currentBalance));
+  const recentValuationAmountFormatted = formatAmount(
+    account.recentValuation.amount
+  );
+  const currentBalanceFormatted = formatAmount(
+    Math.abs(account.associatedMortgages[0].currentBalance)
+  );
   const lastUpdatedFormatted = formatDate(lastUpdate);
-  console.log(lastUpdate)
-  const originalPurchasePriceDateFormatted = formatDate(account.originalPurchasePriceDate)
+  console.log(lastUpdate);
+  const originalPurchasePriceDateFormatted = formatDate(
+    account.originalPurchasePriceDate
+  );
   // const originalPruchasePriceFormatted = formatAmount(originalPurchasePrice)
-  
+
   return (
     <Inset>
       <AccountSection>
         <AccountLabel>Estimated Value</AccountLabel>
-        <AccountHeadline>
-          {recentValuationAmountFormatted}
-        </AccountHeadline>
+        <AccountHeadline>{recentValuationAmountFormatted}</AccountHeadline>
         <AccountList>
+          <InfoText>{`Last updated ${lastUpdatedFormatted}`}</InfoText>
           <InfoText>
-            {`Last updated ${lastUpdatedFormatted}`}
-          </InfoText>
-          <InfoText>
-         
-            {`Next update ${ formatDate(add(lastUpdate, { days: account.updateAfterDays }))}`}
+            {`Next update ${formatDate(
+              add(lastUpdate, { days: account.updateAfterDays })
+            )}`}
           </InfoText>
         </AccountList>
       </AccountSection>
@@ -174,9 +173,7 @@ if (Object.keys(account).length === 0) {
             onClick={() => alert("You have navigated to the mortgage page")}
           >
             <AccountList>
-              <InfoText>
-                {currentBalanceFormatted}
-              </InfoText>
+              <InfoText>{currentBalanceFormatted}</InfoText>
               <InfoText>{account.associatedMortgages[0].name}</InfoText>
             </AccountList>
           </RowContainer>
@@ -187,8 +184,10 @@ if (Object.keys(account).length === 0) {
         <RowContainer>
           <AccountList>
             <InfoText>
-              Purchased for&nbsp;<strong>{formatAmount(account.originalPurchasePrice)}</strong>&nbsp;on the&nbsp;
-            {originalPurchasePriceDateFormatted}
+              Purchased for&nbsp;
+              <strong>{formatAmount(account.originalPurchasePrice)}</strong>
+              &nbsp;on the&nbsp;
+              {originalPurchasePriceDateFormatted}
             </InfoText>
             <InfoText>
               Since purchase&nbsp;
