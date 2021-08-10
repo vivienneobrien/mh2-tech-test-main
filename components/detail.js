@@ -110,17 +110,22 @@ const annualAppreciation = ({
 
 const Detail = () => {
   const [account, setAccount] = useState({});
+  const [accountIsLoading, setAccountIsLoading] = useState(false)
 
   useEffect(() => {
+    setAccountIsLoading(true)
     axios
       .get("/api/account")
       .then((response) => 
-        setAccount(response.data.account));
+        setAccount(response.data.account),
+        setAccountIsLoading(false))
+      .catch(err => console.log(err),
+        setAccountIsLoading(false));
   }, []);
 
   // checking if account is empty
   if (Object.keys(account).length === 0) {
-    return <div>No account provided</div>;
+    return  (<div>{accountIsLoading} <div>Loading Account</div> </div>);
   }
 
   let mortgage;
