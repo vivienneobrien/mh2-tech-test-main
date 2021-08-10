@@ -95,9 +95,10 @@ const annualAppreciation = ({
   );
 
   const currentYear = new Date().getFullYear();
-  const numberOfYearsSincePurchased =
-    currentYear - parseInt(originalPurchasePriceDate.slice(0, 4));
-
+  const numberOfYearsSincePurchased = subtract(
+    currentYear,
+    parseInt(originalPurchasePriceDate.slice(0, 4))
+  );
   const annualAppreciationCalculation = divide(
     sincePurchasedPricePercentageCalculation,
     numberOfYearsSincePurchased
@@ -110,22 +111,16 @@ const annualAppreciation = ({
 
 const Detail = () => {
   const [account, setAccount] = useState({});
-  const [accountIsLoading, setAccountIsLoading] = useState(false)
 
   useEffect(() => {
-    setAccountIsLoading(true)
     axios
       .get("/api/account")
-      .then((response) => 
-        setAccount(response.data.account),
-        setAccountIsLoading(false))
-      .catch(err => console.log(err),
-        setAccountIsLoading(false));
+      .then((response) => setAccount(response.data.account));
   }, []);
 
   // checking if account is empty
   if (Object.keys(account).length === 0) {
-    return  (<div>{accountIsLoading} <div>Loading Account</div> </div>);
+    return <div>No account provided</div>;
   }
 
   let mortgage;
@@ -141,13 +136,14 @@ const Detail = () => {
     Math.abs(account.associatedMortgages[0].currentBalance)
   );
   const lastUpdatedFormatted = formatDate(lastUpdate);
-  console.log(lastUpdate);
   const originalPurchasePriceDateFormatted = formatDate(
     account.originalPurchasePriceDate
   );
-  const originalPruchasePriceFormatted = formatAmount(account.originalPurchasePrice);
+  const originalPruchasePriceFormatted = formatAmount(
+    account.originalPurchasePrice
+  );
   const sincePurchasedAccount = sincePurchased(account);
-  const sincePurchasedAccountPercentage= sincePurchasedPercentage(account);
+  const sincePurchasedAccountPercentage = sincePurchasedPercentage(account);
   const annualAppreciationAccount = annualAppreciation(account);
 
   return (
