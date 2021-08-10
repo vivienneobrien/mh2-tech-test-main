@@ -26,14 +26,14 @@ const calculatePercentage = (numOne, numTwo) => {
   return total;
 };
 
-// More functionality can be added here if a percentage was not a perfect decimal and needed to be rounded to a certain decimal place, up or down (.floor/.ceil)
-const formatPercentage = (num) => {
-  return num + "%";
-};
-
 const divide = (numOne, numTwo) => {
   const total = numOne / numTwo;
   return total;
+};
+
+// More functionality can be added here if a percentage was not a perfect decimal and needed to be rounded to a certain decimal place, up or down (.floor/.ceil)
+const formatPercentage = (num) => {
+  return num + "%";
 };
 
 const formatDate = (stringDateObject) => {
@@ -114,12 +114,13 @@ const Detail = () => {
   useEffect(() => {
     axios
       .get("/api/account")
-      .then((response) => setAccount(response.data.account));
+      .then((response) => 
+        setAccount(response.data.account));
   }, []);
 
   // checking if account is empty
   if (Object.keys(account).length === 0) {
-    return <div></div>;
+    return <div>No account provided</div>;
   }
 
   let mortgage;
@@ -139,7 +140,10 @@ const Detail = () => {
   const originalPurchasePriceDateFormatted = formatDate(
     account.originalPurchasePriceDate
   );
-  // const originalPruchasePriceFormatted = formatAmount(originalPurchasePrice)
+  const originalPruchasePriceFormatted = formatAmount(account.originalPurchasePrice);
+  const sincePurchasedAccount = sincePurchased(account);
+  const sincePurchasedAccountPercentage= sincePurchasedPercentage(account);
+  const annualAppreciationAccount = annualAppreciation(account);
 
   return (
     <Inset>
@@ -185,19 +189,19 @@ const Detail = () => {
           <AccountList>
             <InfoText>
               Purchased for&nbsp;
-              <strong>{formatAmount(account.originalPurchasePrice)}</strong>
-              &nbsp;on the&nbsp;
+              <strong>{originalPruchasePriceFormatted}</strong>
+              &nbsp;on&nbsp;the&nbsp;
               {originalPurchasePriceDateFormatted}
             </InfoText>
             <InfoText>
               Since purchase&nbsp;
               <strong>
-                {sincePurchased(account)} {sincePurchasedPercentage(account)}
+                {sincePurchasedAccount} {sincePurchasedAccountPercentage}
               </strong>
             </InfoText>
             <InfoText>
               Annual Appreciation&nbsp;
-              <strong>{annualAppreciation(account)}</strong>
+              <strong>{annualAppreciationAccount}</strong>
             </InfoText>
           </AccountList>
         </RowContainer>
