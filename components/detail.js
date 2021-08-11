@@ -115,36 +115,13 @@ const Detail = () => {
   useEffect(() => {
     axios
       .get("/api/account")
-      .then((response) => setAccount(response.data.account));
-  }, []);
-
-  const [accountIsLoading, setAccountIsLoading] = useState(false);
-
-  useEffect(() => {
-    setAccountIsLoading(true);
-    axios
-      .get("/api/account")
-      .then(
-        (response) => { setAccount(response.data.account)
-        setAccountIsLoading(false)
-        }
-      )
-      .catch(
-        (err) => {console.log(err)
-        setAccountIsLoading(false)
-        }
-      );
+      .then((response) => setAccount(response.data.account))
+      .catch((err) => console.log(err));
   }, []);
 
   // checking if account is empty
-  // if (Object.keys(account).length === 0) {
-  //   return <div>No account provided</div>;
-  // }
-
-  if (accountIsLoading) {
-    return ( {accountIsLoading} &&
-      <div>Loading Account...</div>
-    );
+  if (Object.keys(account).length === 0) {
+    return <div>No account provided</div>;
   }
 
   let mortgage;
